@@ -48,7 +48,7 @@
 
     <h2>User Registration</h2>
 
-    <form action="register" method="post">
+    <form action="${pageContext.request.contextPath}/register" method="post">
 
         <input type="text"
                name="fullName"

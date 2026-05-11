@@ -1,4 +1,4 @@
-package com.hirevision;
+package com;
 
 import com.hirevision.util.DBConnection;
 
