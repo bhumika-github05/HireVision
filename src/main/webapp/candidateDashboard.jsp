@@ -44,6 +44,20 @@
 
     <br><br>
 
+    <a href="viewJobs.jsp"
+       style="
+   background:#007bff;
+   color:white;
+   padding:10px 20px;
+   text-decoration:none;
+   border-radius:5px;">
+
+        View Available Jobs
+
+    </a>
+
+    <br><br>
+
     <a href="logout"
        style="
    background:red;

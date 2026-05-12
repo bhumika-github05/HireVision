@@ -6,6 +6,10 @@ import com.hirevision.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 public class JobDAO {
 
     public boolean addJob(Job job) {
@@ -41,5 +45,64 @@ public class JobDAO {
         }
 
         return status;
+    }
+
+
+    public List<Job> getAllJobs() {
+
+        List<Job> jobs = new ArrayList<>();
+
+        try {
+
+            Connection conn =
+                    DBConnection.getConnection();
+
+            String sql =
+                    "SELECT * FROM jobs";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Job job = new Job();
+
+                job.setId(rs.getInt("id"));
+
+                job.setJobTitle(
+                        rs.getString("job_title")
+                );
+
+                job.setCompanyName(
+                        rs.getString("company_name")
+                );
+
+                job.setLocation(
+                        rs.getString("location")
+                );
+
+                job.setSalary(
+                        rs.getString("salary")
+                );
+
+                job.setDescription(
+                        rs.getString("description")
+                );
+
+                job.setPostedBy(
+                        rs.getInt("posted_by")
+                );
+
+                jobs.add(job);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return jobs;
     }
 }
