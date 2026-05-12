@@ -29,35 +29,9 @@ public class RegisterServlet extends HttpServlet {
         boolean status = userDAO.registerUser(user);
 
         if (status) {
-            response.getWriter().println("Registration Successful!");
+            response.sendRedirect("login.jsp");
         } else {
             response.getWriter().println("Registration Failed!");
         }
     }
 }
-//
-//package com.hirevision.controller;
-//
-//import jakarta.servlet.annotation.WebServlet;
-//import jakarta.servlet.http.*;
-//import java.io.IOException;
-//
-//@WebServlet("/register")
-//public class RegisterServlet extends HttpServlet {
-//
-//    @Override
-//    protected void doGet(HttpServletRequest request,
-//                         HttpServletResponse response)
-//            throws IOException {
-//
-//        response.getWriter().println("Servlet is working!");
-//    }
-//
-//    @Override
-//    protected void doPost(HttpServletRequest request,
-//                          HttpServletResponse response)
-//            throws IOException {
-//
-//        response.getWriter().println("POST is working!");
-//    }
-//}
