@@ -27,9 +27,20 @@ public class LoginServlet extends HttpServlet {
 
             session.setAttribute("loggedInUser", user);
 
-            response.sendRedirect("dashboard.jsp");
+            session.setAttribute("userName", user.getFullName());
 
-        } else {
+            session.setAttribute("userRole", user.getRole());
+
+            if(user.getRole().equals("Candidate")){
+
+                response.sendRedirect("candidateDashboard.jsp");
+
+            } else {
+
+                response.sendRedirect("recruiterDashboard.jsp");
+            }
+
+        }else {
 
             response.getWriter().println("Invalid Email or Password!");
 
