@@ -42,6 +42,20 @@
         <%= session.getAttribute("userRole") %>
     </p>
 
+    <br><br>
+
+    <a href="logout"
+       style="
+   background:red;
+   color:white;
+   padding:10px 20px;
+   text-decoration:none;
+   border-radius:5px;">
+        Logout
+    </a>
+
+
+
 </div>
 
 </body>
