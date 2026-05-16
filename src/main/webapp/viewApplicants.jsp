@@ -149,7 +149,7 @@
     </a>
 
     <a class="resume-btn"
-       href="<%= rs.getString("resume_link") %>"
+       href="<%= request.getContextPath() %>/<%= rs.getString("resume_link") %>"
        target="_blank">
 
       View Resume

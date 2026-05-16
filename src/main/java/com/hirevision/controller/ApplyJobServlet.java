@@ -41,8 +41,8 @@ public class ApplyJobServlet extends HttpServlet {
                 filePart.getSubmittedFileName();
 
         String uploadPath =
-                getServletContext().getRealPath("") +
-                        "resumes";
+                getServletContext()
+                        .getRealPath("/uploads");
 
         java.io.File uploadDir =
                 new java.io.File(uploadPath);
@@ -58,7 +58,7 @@ public class ApplyJobServlet extends HttpServlet {
         );
 
         String resumeLink =
-                "resumes/" + fileName;
+                "uploads/" + fileName;
 
         Application app =
                 new Application(
