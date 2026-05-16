@@ -4,6 +4,7 @@
          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
+    <!--    Register Servlet    -->
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>com.hirevision.controller.RegisterServlet</servlet-class>
@@ -13,6 +14,8 @@
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
+
+    <!--    Login Servlet    -->
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -26,6 +29,8 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
+    <!--    Logout Servlet    -->
+
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>
@@ -37,6 +42,8 @@
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+
+    <!--    Post Job Servlet    -->
 
     <servlet>
         <servlet-name>PostJobServlet</servlet-name>
@@ -52,34 +59,24 @@
         <url-pattern>/postJob</url-pattern>
     </servlet-mapping>
 
+    <!--    Apply Job Servlet    -->
+
+    <servlet>
+        <servlet-name>ApplyJobServlet</servlet-name>
+
+        <servlet-class>
+            com.hirevision.controller.ApplyJobServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ApplyJobServlet</servlet-name>
+
+        <url-pattern>/applyJob</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>register.jsp</welcome-file>
     </welcome-file-list>
 
 </web-app>
-
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-
-<!--<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"-->
-<!--         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-<!--         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee-->
-<!--         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"-->
-<!--         version="6.0">-->
-
-<!--    <servlet>-->
-<!--        <servlet-name>RegisterServlet</servlet-name>-->
-<!--        <servlet-class>-->
-<!--            com.hirevision.controller.RegisterServlet-->
-<!--        </servlet-class>-->
-<!--    </servlet>-->
-
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>RegisterServlet</servlet-name>-->
-<!--        <url-pattern>/register</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    <welcome-file-list>-->
-<!--        <welcome-file>register.jsp</welcome-file>-->
-<!--    </welcome-file-list>-->
-
-<!--</web-app>-->

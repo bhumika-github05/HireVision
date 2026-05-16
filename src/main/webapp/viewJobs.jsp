@@ -35,6 +35,21 @@
             box-shadow:0px 0px 10px gray;
         }
 
+        .apply-btn{
+            background:#28a745;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .apply-btn:hover{
+            background:#218838;
+            transform:scale(1.05);
+        }
+
         h1{
             text-align:center;
         }
@@ -82,6 +97,31 @@
             <b>Description:</b>
             <%= job.getDescription() %>
         </p>
+
+        <br>
+
+        <form action="applyJob"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden"
+                   name="jobId"
+                   value="<%= job.getId() %>">
+
+            <input type="file"
+                   name="resume"
+                   required>
+
+            <br><br>
+
+            <button type="submit"
+                    class="apply-btn">
+
+                Apply Now
+
+            </button>
+
+        </form>
 
     </div>
 
