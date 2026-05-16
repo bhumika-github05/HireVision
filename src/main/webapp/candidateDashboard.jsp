@@ -58,6 +58,20 @@
 
     <br><br>
 
+    <a href="myApplications.jsp"
+       style="
+   background:#007bff;
+   color:white;
+   padding:10px 20px;
+   text-decoration:none;
+   border-radius:5px;">
+
+        My Applications
+
+    </a>
+
+    <br><br>
+
     <a href="logout"
        style="
    background:red;
