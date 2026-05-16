@@ -105,4 +105,71 @@ public class JobDAO {
 
         return jobs;
     }
+
+    public List<Job> searchJobs(String keyword){
+
+        List<Job> jobs =
+                new ArrayList<>();
+
+        try {
+
+            Connection conn =
+                    DBConnection.getConnection();
+
+            String sql =
+                    "SELECT * FROM jobs " +
+                            "WHERE job_title LIKE ? " +
+                            "OR company_name LIKE ? " +
+                            "OR location LIKE ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            String searchKeyword =
+                    "%" + keyword + "%";
+
+            ps.setString(1, searchKeyword);
+
+            ps.setString(2, searchKeyword);
+
+            ps.setString(3, searchKeyword);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Job job = new Job();
+
+                job.setId(rs.getInt("id"));
+
+                job.setJobTitle(
+                        rs.getString("job_title")
+                );
+
+                job.setCompanyName(
+                        rs.getString("company_name")
+                );
+
+                job.setLocation(
+                        rs.getString("location")
+                );
+
+                job.setSalary(
+                        rs.getString("salary")
+                );
+
+                job.setDescription(
+                        rs.getString("description")
+                );
+
+                jobs.add(job);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return jobs;
+    }
 }

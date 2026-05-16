@@ -7,7 +7,22 @@
 <%
     JobDAO dao = new JobDAO();
 
-    List<Job> jobs = dao.getAllJobs();
+    String keyword =
+            request.getParameter("keyword");
+
+    List<Job> jobs;
+
+    if(keyword != null &&
+            !keyword.trim().equals("")){
+
+        jobs =
+                dao.searchJobs(keyword);
+
+    } else {
+
+        jobs =
+                dao.getAllJobs();
+    }
 
     User loggedInUser =
             (User) session.getAttribute("loggedInUser");
@@ -23,6 +38,32 @@
 
     <title>Available Jobs</title>
 
+    <form method="get"
+          action="viewJobs.jsp"
+          style="margin-bottom:30px;">
+
+        <input type="text"
+               name="keyword"
+               placeholder="Search by title, company or location"
+               style="
+           width:70%;
+           padding:10px;
+           border-radius:5px;
+           border:1px solid gray;">
+
+        <button type="submit"
+                style="
+            padding:10px 20px;
+            background:#007bff;
+            color:white;
+            border:none;
+            border-radius:5px;">
+
+            Search
+
+        </button>
+
+    </form>
     <style>
 
         body{
