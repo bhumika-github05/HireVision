@@ -58,6 +58,20 @@
 
   <br><br>
 
+  <a href="myJobs.jsp"
+     style="
+   background:#28a745;
+   color:white;
+   padding:10px 20px;
+   text-decoration:none;
+   border-radius:5px;">
+
+    Manage My Jobs
+
+  </a>
+
+  <br><br>
+
   <a href="viewApplicants.jsp"
      style="
    background:#007bff;

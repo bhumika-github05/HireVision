@@ -97,6 +97,21 @@
         </url-pattern>
     </servlet-mapping>
 
+    <!--    Delete Job Servlet    -->
+    <servlet>
+        <servlet-name>DeleteJobServlet</servlet-name>
+
+        <servlet-class>
+            com.hirevision.controller.DeleteJobServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DeleteJobServlet</servlet-name>
+
+        <url-pattern>/deleteJob</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>register.jsp</welcome-file>
     </welcome-file-list>
