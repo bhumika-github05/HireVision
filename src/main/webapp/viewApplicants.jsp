@@ -1,5 +1,6 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="com.hirevision.util.DBConnection" %>
+<%@ page import="com.hirevision.model.User" %>
 
 <!DOCTYPE html>
 <html>
@@ -55,6 +56,21 @@
   <h1>Applicants</h1>
 
   <%
+    User loggedInUser =
+            (User) session.getAttribute("loggedInUser");
+
+    if(loggedInUser == null){
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
+    if(!"Recruiter".equals(loggedInUser.getRole())){
+        response.sendRedirect("candidateDashboard.jsp");
+        return;
+    }
+
+    int recruiterId =
+            loggedInUser.getId();
 
     Connection conn =
             DBConnection.getConnection();
@@ -67,10 +83,14 @@
                     "applications.status " +
                     "FROM applications " +
                     "JOIN users ON applications.user_id = users.id " +
-                    "JOIN jobs ON applications.job_id = jobs.id";
+                    "JOIN jobs ON applications.job_id = jobs.id " +
+                    "WHERE jobs.posted_by = ? " +
+                    "ORDER BY applications.id DESC";
 
     PreparedStatement ps =
             conn.prepareStatement(sql);
+
+    ps.setInt(1, recruiterId);
 
     ResultSet rs =
             ps.executeQuery();
