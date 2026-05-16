@@ -1,11 +1,19 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.hirevision.dao.JobDAO" %>
 <%@ page import="com.hirevision.model.Job" %>
+<%@ page import="com.hirevision.model.User" %>
+<%@ page import="com.hirevision.dao.ApplicationDAO" %>
 
 <%
     JobDAO dao = new JobDAO();
 
     List<Job> jobs = dao.getAllJobs();
+
+    User loggedInUser =
+            (User) session.getAttribute("loggedInUser");
+
+    ApplicationDAO applicationDAO =
+            new ApplicationDAO();
 %>
 
 <!DOCTYPE html>
@@ -50,6 +58,15 @@
             transform:scale(1.05);
         }
 
+        .applied-btn{
+            background:gray;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:5px;
+            cursor:not-allowed;
+        }
+
         h1{
             text-align:center;
         }
@@ -70,6 +87,12 @@
 
     <%
         for(Job job : jobs){
+
+            boolean alreadyApplied =
+                    applicationDAO.hasAlreadyApplied(
+                            loggedInUser.getId(),
+                            job.getId()
+                    );
     %>
 
     <div class="job-card">
@@ -100,6 +123,22 @@
 
         <br>
 
+        <%
+            if(alreadyApplied){
+        %>
+
+        <button
+                disabled
+                class="applied-btn">
+
+            Applied
+
+        </button>
+
+        <%
+        } else {
+        %>
+
         <form action="applyJob"
               method="post"
               enctype="multipart/form-data">
@@ -122,6 +161,10 @@
             </button>
 
         </form>
+
+        <%
+            }
+        %>
 
     </div>
 
