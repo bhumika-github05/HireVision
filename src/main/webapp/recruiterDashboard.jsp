@@ -56,6 +56,20 @@
 
   </a>
 
+  <br><br>
+
+  <a href="viewApplicants.jsp"
+     style="
+   background:#007bff;
+   color:white;
+   padding:10px 20px;
+   text-decoration:none;
+   border-radius:5px;">
+
+    View Applicants
+
+  </a>
+
   <br><br><br>
 
   <a href="logout"
