@@ -75,6 +75,28 @@
         <url-pattern>/applyJob</url-pattern>
     </servlet-mapping>
 
+    <!--    Update Application Status Servlet-->
+
+    <servlet>
+        <servlet-name>
+            UpdateApplicationStatusServlet
+        </servlet-name>
+
+        <servlet-class>
+            com.hirevision.controller.UpdateApplicationStatusServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            UpdateApplicationStatusServlet
+        </servlet-name>
+
+        <url-pattern>
+            /updateApplicationStatus
+        </url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>register.jsp</welcome-file>
     </welcome-file-list>

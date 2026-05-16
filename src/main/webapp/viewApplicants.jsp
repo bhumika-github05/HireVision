@@ -120,6 +120,34 @@
       <%= rs.getString("status") %>
     </p>
 
+    <br>
+
+    <a href="updateApplicationStatus?id=<%= rs.getInt("id") %>&status=Accepted"
+       style="
+   background:green;
+   color:white;
+   padding:8px 15px;
+   text-decoration:none;
+   border-radius:5px;">
+
+      Accept
+
+    </a>
+
+    &nbsp;
+
+    <a href="updateApplicationStatus?id=<%= rs.getInt("id") %>&status=Rejected"
+       style="
+   background:red;
+   color:white;
+   padding:8px 15px;
+   text-decoration:none;
+   border-radius:5px;">
+
+      Reject
+
+    </a>
+
     <a class="resume-btn"
        href="<%= rs.getString("resume_link") %>"
        target="_blank">
