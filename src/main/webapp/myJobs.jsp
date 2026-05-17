@@ -1,58 +1,537 @@
-<%@ page import="java.sql.*" %>
-<%@ page import="com.hirevision.util.DBConnection" %>
+<%@ page import="java.util.List" %>
 <%@ page import="com.hirevision.model.User" %>
+<%@ page import="com.hirevision.model.Job" %>
+<%@ page import="com.hirevision.dao.JobDAO" %>
+<%@ page import="com.hirevision.dao.ApplicationDAO" %>
 
 <%
-
-  User recruiter =
+  User loggedInUser =
           (User) session.getAttribute("loggedInUser");
 
-  int recruiterId =
-          recruiter.getId();
+  if(loggedInUser == null){
+    response.sendRedirect("auth.jsp");
+    return;
+  }
 
+  JobDAO jobDAO =
+          new JobDAO();
+
+  ApplicationDAO applicationDAO =
+          new ApplicationDAO();
+
+  List<Job> recruiterJobs =
+          jobDAO.getJobsByRecruiter(
+                  loggedInUser.getId()
+          );
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-  <title>My Posted Jobs</title>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>My Jobs - HireVision</title>
+
+  <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+  <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <style>
 
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Inter', sans-serif;
+    }
+
     body{
-      font-family:Arial;
-      background:#f4f4f4;
+
+      min-height:100vh;
+
+      background:
+              radial-gradient(circle at top left,
+              rgba(37,99,235,0.20),
+              transparent 30%),
+
+              radial-gradient(circle at bottom right,
+              rgba(124,58,237,0.18),
+              transparent 30%),
+
+              linear-gradient(
+                      135deg,
+                      #020617,
+                      #030712,
+                      #000814
+              );
+
+      color:white;
+
+      overflow-x:hidden;
     }
 
-    .container{
-      width:80%;
-      margin:30px auto;
+    body::before{
+
+      content:"";
+
+      position:fixed;
+
+      inset:0;
+
+      background:
+              linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+
+      background-size:55px 55px;
+
+      pointer-events:none;
     }
 
-    .card{
-      background:white;
-      padding:20px;
-      margin-bottom:20px;
+    .dashboard{
+
+      display:grid;
+
+      grid-template-columns:250px 1fr;
+
+      min-height:100vh;
+    }
+
+    .profile{
+
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .profile-avatar{
+
+      width:42px;
+      height:42px;
+
+      border-radius:12px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      background:
+              linear-gradient(
+                      135deg,
+                      #2563eb,
+                      #7c3aed
+              );
+
+      color:white;
+
+      font-weight:800;
+
+      font-size:16px;
+
+      box-shadow:
+              0 10px 24px rgba(37,99,235,0.35);
+    }
+
+    .profile h4{
+
+      font-size:16px;
+    }
+
+    .profile p{
+
+      margin-top:4px;
+
+      color:#9fb0c8;
+
+      font-size:14px;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar{
+
+      background:
+              rgba(5,12,28,0.84);
+
+      border-right:
+              1px solid rgba(148,163,184,0.12);
+
+      backdrop-filter:blur(18px);
+
+      padding:24px 14px;
+    }
+
+    .logo{
+
+      display:flex;
+      align-items:center;
+      gap:12px;
+
+      padding:0 10px;
+
+      margin-bottom:42px;
+    }
+
+    .logo-icon{
+
+      width:44px;
+      height:44px;
+
+      border-radius:13px;
+
+      display:grid;
+      place-items:center;
+
+      background:
+              linear-gradient(
+                      135deg,
+                      #2857ff,
+                      #7c3aed
+              );
+
+      box-shadow:
+              0 16px 34px rgba(37,99,235,0.34);
+
+      font-size:24px;
+    }
+
+    .logo-text h1{
+
+      font-size:20px;
+
+      font-weight:800;
+    }
+
+    .logo-text span{
+      color:#2383ff;
+    }
+
+    .logo-text p{
+
+      margin-top:6px;
+
+      color:#98a6bc;
+
+      font-size:12px;
+    }
+
+    .menu{
+
+      display:grid;
+
+      gap:10px;
+    }
+
+    .menu a{
+
+      display:flex;
+      align-items:center;
+      gap:13px;
+
+      min-height:44px;
+
+      padding:0 14px;
+
       border-radius:10px;
-      box-shadow:0px 0px 10px gray;
+
+      color:#b9c4d7;
+
+      text-decoration:none;
+
+      font-size:15px;
+
+      font-weight:600;
+
+      transition:0.3s;
+    }
+
+    .menu a:hover,
+    .menu a.active{
+
+      color:white;
+
+      background:
+              linear-gradient(
+                      135deg,
+                      rgba(37,99,235,0.42),
+                      rgba(37,99,235,0.13)
+              );
+
+      box-shadow:
+              inset 0 0 0 1px rgba(35,131,255,0.42),
+              0 14px 34px rgba(37,99,235,0.18);
+    }
+
+    .menu i{
+
+      width:22px;
+
+      font-size:20px;
+    }
+
+    /* MAIN */
+
+    .main{
+
+      padding:24px 34px 34px;
+    }
+
+    .topbar{
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      margin-bottom:30px;
+    }
+
+    .page-title h1{
+
+      font-size:34px;
+
+      font-weight:800;
+    }
+
+    .page-title p{
+
+      margin-top:8px;
+
+      color:#9fb0c8;
+    }
+
+    .profile{
+
+      text-align:right;
+    }
+
+    .profile h4{
+
+      font-size:18px;
+    }
+
+    .profile p{
+
+      margin-top:4px;
+
+      color:#9fb0c8;
+
+      font-size:14px;
+    }
+
+    /* JOB LIST */
+
+    .job-list{
+
+      display:grid;
+
+      gap:22px;
+    }
+
+    .job-card{
+
+      background:
+              rgba(12,18,32,0.72);
+
+      border:
+              1px solid rgba(148,163,184,0.14);
+
+      border-radius:24px;
+
+      padding:28px;
+
+      transition:0.3s;
+    }
+
+    .job-card:hover{
+
+      transform:translateY(-3px);
+
+      box-shadow:
+              0 18px 36px rgba(37,99,235,0.14);
+    }
+
+    .card-top{
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:flex-start;
+
+      margin-bottom:20px;
+    }
+
+    .job-title h2{
+
+      font-size:28px;
+    }
+
+    .company{
+
+      margin-top:8px;
+
+      color:#60a5fa;
+
+      font-weight:600;
+    }
+
+    .job-info{
+
+      display:flex;
+
+      gap:22px;
+
+      flex-wrap:wrap;
+
+      color:#b6c3d7;
+
+      margin-bottom:22px;
+    }
+
+    .job-info div{
+
+      display:flex;
+
+      align-items:center;
+
+      gap:8px;
+    }
+
+    .description{
+
+      color:#d1d5db;
+
+      line-height:1.8;
+
+      margin-bottom:24px;
+    }
+
+    .actions{
+
+      display:flex;
+
+      gap:14px;
+
+      flex-wrap:wrap;
+    }
+
+    .edit-btn,
+    .delete-btn,
+    .applicants-btn{
+
+      padding:12px 18px;
+
+      border:none;
+
+      border-radius:12px;
+
+      color:white;
+
+      font-weight:700;
+
+      text-decoration:none;
+
+      transition:0.3s;
+    }
+
+    .edit-btn{
+
+      background:
+              linear-gradient(
+                      135deg,
+                      #2563eb,
+                      #3b82f6
+              );
     }
 
     .delete-btn{
-      background:red;
-      color:white;
-      padding:10px 15px;
-      text-decoration:none;
-      border-radius:5px;
+
+      background:
+              linear-gradient(
+                      135deg,
+                      #f87171,
+                      #fca5a5
+              );
+
+      color:#3b0a0a;
     }
 
-    .delete-btn:hover{
-      background:darkred;
+    .applicants-btn{
+
+      background:
+              linear-gradient(
+                      135deg,
+                      #34d399,
+                      #6ee7b7
+              );
+
+      color:#06281f;
     }
 
-    h1{
+    .edit-btn:hover,
+    .delete-btn:hover,
+    .applicants-btn:hover{
+
+      transform:translateY(-2px);
+    }
+
+    .empty{
+
       text-align:center;
+
+      padding:80px 20px;
+    }
+
+    .empty i{
+
+      font-size:80px;
+
+      color:#3b82f6;
+    }
+
+    .empty h2{
+
+      margin-top:24px;
+
+      font-size:34px;
+    }
+
+    .empty p{
+
+      margin-top:14px;
+
+      color:#9fb0c8;
+    }
+
+    @media(max-width:900px){
+
+      .dashboard{
+        grid-template-columns:1fr;
+      }
+
+      .main{
+        padding:20px;
+      }
+
+      .card-top{
+        flex-direction:column;
+        gap:14px;
+      }
     }
 
   </style>
@@ -61,70 +540,229 @@
 
 <body>
 
-<div class="container">
+<div class="dashboard">
 
-  <h1>My Posted Jobs</h1>
+  <!-- SIDEBAR -->
 
-  <%
+  <aside class="sidebar">
 
-    Connection conn =
-            DBConnection.getConnection();
+    <div class="logo">
 
-    String sql =
-            "SELECT * FROM jobs WHERE posted_by=?";
+      <div class="logo-icon">
+        <i class="bi bi-columns-gap"></i>
+      </div>
 
-    PreparedStatement ps =
-            conn.prepareStatement(sql);
+      <div class="logo-text">
 
-    ps.setInt(1, recruiterId);
+        <h1>
+          Hire<span>Vision</span>
+        </h1>
 
-    ResultSet rs =
-            ps.executeQuery();
+        <p>
+          Smart Hiring, Better Future
+        </p>
 
-    while(rs.next()){
+      </div>
 
-  %>
+    </div>
 
-  <div class="card">
+    <nav class="menu">
 
-    <h2>
-      <%= rs.getString("job_title") %>
-    </h2>
+      <a href="recruiterDashboard.jsp">
 
-    <p>
-      <b>Company:</b>
-      <%= rs.getString("company_name") %>
-    </p>
+        <i class="bi bi-house-door"></i>
 
-    <p>
-      <b>Location:</b>
-      <%= rs.getString("location") %>
-    </p>
+        Dashboard
 
-    <p>
-      <b>Salary:</b>
-      <%= rs.getString("salary") %>
-    </p>
+      </a>
 
-    <br>
+      <a href="postJob.jsp">
 
-    <a class="delete-btn"
-       href="deleteJob?id=<%= rs.getInt("id") %>"
-       onclick="return confirm('Are you sure you want to delete this job?');">
+        <i class="bi bi-plus-circle"></i>
 
-      Delete Job
+        Post Job
 
-    </a>
+      </a>
 
-  </div>
+      <a href="myJobs.jsp"
+         class="active">
 
-  <%
+        <i class="bi bi-briefcase"></i>
 
-    }
+        My Jobs
 
-    conn.close();
+      </a>
 
-  %>
+      <a href="viewApplicants.jsp">
+
+        <i class="bi bi-people"></i>
+
+        Applicants
+
+      </a>
+
+      <a href="auth.jsp">
+
+        <i class="bi bi-box-arrow-right"></i>
+
+        Logout
+
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <div class="page-title">
+
+        <h1>
+          My Jobs
+        </h1>
+
+        <p>
+          Manage and track all your posted jobs.
+        </p>
+
+      </div>
+
+      <div class="profile">
+
+        <div class="profile-avatar">
+          <%= loggedInUser.getFullName().substring(0,1).toUpperCase() %>
+        </div>
+
+        <div>
+
+          <h4>
+            <%= loggedInUser.getFullName() %>
+          </h4>
+
+          <p>
+            Recruiter
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="job-list">
+
+      <%
+        if(recruiterJobs.size() == 0){
+      %>
+
+      <div class="empty">
+
+        <i class="bi bi-briefcase"></i>
+
+        <h2>
+          No Jobs Posted Yet
+        </h2>
+
+        <p>
+          Start posting jobs to attract candidates.
+        </p>
+
+      </div>
+
+      <%
+      } else {
+
+        for(Job job : recruiterJobs){
+
+          int applicantCount =
+                  applicationDAO
+                          .getApplicationsByJob(
+                                  job.getId()
+                          ).size();
+      %>
+
+      <div class="job-card">
+
+        <div class="card-top">
+
+          <div class="job-title">
+
+            <h2>
+              <%= job.getJobTitle() %>
+            </h2>
+
+            <div class="company">
+              <%= job.getCompanyName() %>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="job-info">
+
+          <div>
+            <i class="bi bi-geo-alt"></i>
+            <%= job.getLocation() %>
+          </div>
+
+          <div>
+            <i class="bi bi-cash-stack"></i>
+            &#8377;<%= job.getSalary() %>
+          </div>
+
+          <div>
+            <i class="bi bi-people"></i>
+            <%= applicantCount %> Applicants
+          </div>
+
+        </div>
+
+        <div class="description">
+
+          <%= job.getDescription() %>
+
+        </div>
+
+        <div class="actions">
+
+          <a href="editJob.jsp?id=<%= job.getId() %>"
+             class="edit-btn">
+
+            Edit Job
+
+          </a>
+
+          <a href="deleteJob?id=<%= job.getId() %>"
+             class="delete-btn"
+             onclick="return confirm('Are you sure you want to delete this job?')">
+
+            Delete Job
+
+          </a>
+
+          <a href="viewApplicants.jsp?jobId=<%= job.getId() %>"
+             class="applicants-btn">
+
+            View Applicants
+
+          </a>
+
+        </div>
+
+      </div>
+
+      <%
+          }
+        }
+      %>
+
+    </div>
+
+  </main>
 
 </div>
 

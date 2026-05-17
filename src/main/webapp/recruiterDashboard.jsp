@@ -702,7 +702,7 @@
 
       </a>
 
-      <a href="viewRecruiterJobs.jsp">
+      <a href="myJobs.jsp">
 
         <i class="bi bi-briefcase"></i>
 

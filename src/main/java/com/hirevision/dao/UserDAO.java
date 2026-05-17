@@ -10,6 +10,54 @@ import java.sql.ResultSet;
 
 public class UserDAO {
 
+    public User getUserById(int id){
+
+        User user = null;
+
+        try{
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            String query =
+                    "SELECT * FROM users WHERE id=?";
+
+            PreparedStatement ps =
+                    con.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            if(rs.next()){
+
+                user = new User();
+
+                user.setId(
+                        rs.getInt("id")
+                );
+
+                user.setFullName(
+                        rs.getString("full_name")
+                );
+
+                user.setEmail(
+                        rs.getString("email")
+                );
+
+                user.setRole(
+                        rs.getString("role")
+                );
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
     public boolean registerUser(User user) {
 
         String query = "INSERT INTO users(full_name, email, password, role) VALUES (?, ?, ?, ?)";
