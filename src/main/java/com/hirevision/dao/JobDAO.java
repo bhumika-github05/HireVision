@@ -12,6 +12,42 @@ import java.util.List;
 
 public class JobDAO {
 
+    public boolean updateJob(Job job){
+
+        boolean status = false;
+
+        try{
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            String query =
+                    "UPDATE jobs SET job_title=?, company_name=?, location=?, salary=?, description=? WHERE id=?";
+
+            PreparedStatement ps =
+                    con.prepareStatement(query);
+
+            ps.setString(1, job.getJobTitle());
+            ps.setString(2, job.getCompanyName());
+            ps.setString(3, job.getLocation());
+            ps.setString(4, job.getSalary());
+            ps.setString(5, job.getDescription());
+            ps.setInt(6, job.getId());
+
+            int rows =
+                    ps.executeUpdate();
+
+            if(rows > 0){
+                status = true;
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return status;
+    }
+
     public List<Job> getJobsByRecruiter(int recruiterId){
 
         List<Job> jobs =

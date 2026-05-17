@@ -29,7 +29,7 @@ public class RegisterServlet extends HttpServlet {
         boolean status = userDAO.registerUser(user);
 
         if (status) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("auth.jsp");
         } else {
             response.getWriter().println("Registration Failed!");
         }

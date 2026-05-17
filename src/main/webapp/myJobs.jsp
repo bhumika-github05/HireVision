@@ -147,7 +147,7 @@
 
     .profile h4{
 
-      font-size:16px;
+      font-size:14px;
     }
 
     .profile p{
@@ -156,7 +156,9 @@
 
       color:#9fb0c8;
 
-      font-size:14px;
+      font-size:12px;
+
+      text-align: left;
     }
 
     /* SIDEBAR */
@@ -297,7 +299,9 @@
 
       align-items:center;
 
-      margin-bottom:30px;
+      margin-bottom:26px;
+
+      width:100%;
     }
 
     .page-title h1{
