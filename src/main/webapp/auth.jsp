@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireVision Auth</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            min-height:100vh;
+            font-family:'Inter', Arial, sans-serif;
+            color:#ffffff;
+            background:
+                    radial-gradient(circle at 12% 20%, rgba(37,99,235,0.22), transparent 32%),
+                    radial-gradient(circle at 85% 75%, rgba(124,58,237,0.16), transparent 30%),
+                    linear-gradient(135deg, #061226 0%, #030816 48%, #01040d 100%);
+            overflow:hidden;
+        }
+
+        body::before{
+            content:"";
+            position:fixed;
+            inset:0;
+            background:
+                    linear-gradient(rgba(59,130,246,0.045) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(59,130,246,0.045) 1px, transparent 1px);
+            background-size:54px 54px;
+            mask-image:radial-gradient(circle at center, black, transparent 72%);
+            pointer-events:none;
+        }
+
+        .page-shell{
+            min-height:100vh;
+            width:min(1460px, calc(100vw - 120px));
+            margin:0 auto;
+            display:grid;
+            grid-template-columns:minmax(420px, 0.88fr) minmax(520px, 1fr);
+            gap:28px;
+            padding:22px 0;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .brand-panel{
+            min-height:calc(100vh - 44px);
+            display:flex;
+            flex-direction:column;
+            justify-content:flex-start;
+            position:relative;
+            z-index:1;
+        }
+
+        .brand{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        .brand-mark{
+            width:44px;
+            height:44px;
+            border-radius:13px;
+            display:grid;
+            place-items:center;
+            background:linear-gradient(135deg, #2857ff, #7c3aed);
+            box-shadow:0 16px 36px rgba(37,99,235,0.34);
+            font-size:24px;
+        }
+
+        .brand-name{
+            font-size:20px;
+            font-weight:800;
+            line-height:1;
+            letter-spacing:0;
+        }
+
+        .brand-name span{
+            color:#2383ff;
+        }
+
+        .brand-tagline{
+            margin-top:7px;
+            color:#9aa8bf;
+            font-size:14px;
+        }
+
+        .hero-copy{
+            max-width:560px;
+            margin-top:48px;
+        }
+
+        .hero-copy h1{
+            font-size:38px;
+            line-height:1.35;
+            font-weight:800;
+        }
+
+        .hero-copy .blue{
+            color:#2383ff;
+        }
+
+        .hero-copy .violet{
+            color:#7658ff;
+        }
+
+        .hero-copy p{
+            max-width:450px;
+            margin-top:18px;
+            color:#b8c2d5;
+            font-size:18px;
+            line-height:1.55;
+        }
+
+        .features{
+            display:grid;
+            gap:20px;
+            margin-top:28px;
+            max-width:560px;
+        }
+
+        .feature{
+            display:grid;
+            grid-template-columns:54px 1fr;
+            gap:18px;
+            align-items:center;
+        }
+
+        .feature-icon{
+            width:54px;
+            height:54px;
+            border-radius:10px;
+            display:grid;
+            place-items:center;
+            border:1px solid rgba(148,163,184,0.24);
+            background:rgba(15,23,42,0.66);
+            box-shadow:inset 0 1px 0 rgba(255,255,255,0.06), 0 14px 34px rgba(15,23,42,0.28);
+            font-size:24px;
+        }
+
+        .feature:nth-child(1) .feature-icon{
+            color:#2383ff;
+        }
+
+        .feature:nth-child(2) .feature-icon{
+            color:#24e0cf;
+        }
+
+        .feature:nth-child(3) .feature-icon{
+            color:#8b5cf6;
+        }
+
+        .feature h2{
+            font-size:17px;
+            margin-bottom:6px;
+        }
+
+        .feature p{
+            color:#b4bfd2;
+            font-size:15px;
+            line-height:1.45;
+        }
+
+        .illustration{
+            width:min(480px, 88%);
+            margin:32px auto 0;
+            aspect-ratio:1.85;
+            position:relative;
+        }
+
+        .screen{
+            position:absolute;
+            left:24%;
+            bottom:10%;
+            width:58%;
+            height:70%;
+            border-radius:10px;
+            border:1px solid rgba(59,130,246,0.35);
+            background:linear-gradient(180deg, rgba(30,64,175,0.52), rgba(8,16,40,0.92));
+            box-shadow:0 28px 70px rgba(37,99,235,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        .screen::before{
+            content:"";
+            position:absolute;
+            left:16px;
+            right:16px;
+            top:14px;
+            height:20px;
+            border-radius:5px;
+            background:rgba(59,130,246,0.24);
+        }
+
+        .candidate-row{
+            position:absolute;
+            left:26px;
+            right:86px;
+            height:38px;
+            border-radius:8px;
+            background:rgba(15,23,42,0.72);
+        }
+
+        .candidate-row:nth-child(1){
+            top:54px;
+        }
+
+        .candidate-row:nth-child(2){
+            top:108px;
+        }
+
+        .candidate-row:nth-child(3){
+            top:162px;
+        }
+
+        .lens{
+            position:absolute;
+            right:8%;
+            top:30%;
+            width:82px;
+            height:82px;
+            border:9px solid rgba(125,172,255,0.9);
+            border-radius:50%;
+            box-shadow:0 0 24px rgba(59,130,246,0.55);
+        }
+
+        .lens::after{
+            content:"";
+            position:absolute;
+            width:52px;
+            height:9px;
+            right:-38px;
+            bottom:-18px;
+            border-radius:999px;
+            background:#7dacff;
+            transform:rotate(42deg);
+        }
+
+        .person-left,
+        .person-right{
+            position:absolute;
+            bottom:5%;
+            width:76px;
+            height:118px;
+            border-radius:38px 38px 16px 16px;
+            background:linear-gradient(180deg, #2383ff, #2846b8);
+            box-shadow:0 18px 35px rgba(37,99,235,0.32);
+        }
+
+        .person-left{
+            left:8%;
+            transform:skewX(-5deg);
+        }
+
+        .person-right{
+            right:7%;
+            height:150px;
+            transform:skewX(6deg);
+        }
+
+        .person-left::before,
+        .person-right::before{
+            content:"";
+            position:absolute;
+            top:-32px;
+            left:21px;
+            width:34px;
+            height:34px;
+            border-radius:50%;
+            background:#f4b28f;
+        }
+
+        .plant{
+            position:absolute;
+            left:0;
+            bottom:4%;
+            width:46px;
+            height:94px;
+            border-left:6px solid #1d4ed8;
+            border-radius:0 0 0 12px;
+        }
+
+        .plant::before,
+        .plant::after{
+            content:"";
+            position:absolute;
+            width:42px;
+            height:22px;
+            border-radius:100% 0 100% 0;
+            background:#2383ff;
+        }
+
+        .plant::before{
+            left:-32px;
+            top:18px;
+            transform:rotate(48deg);
+        }
+
+        .plant::after{
+            left:6px;
+            top:42px;
+            transform:rotate(-24deg);
+        }
+
+        .auth-panel{
+            min-height:calc(100vh - 44px);
+            display:flex;
+            align-items:center;
+            justify-content:flex-end;
+            position:relative;
+            z-index:1;
+        }
+
+        .auth-card{
+            width:min(660px, 100%);
+            border:1px solid rgba(148,163,184,0.18);
+            border-radius:22px;
+            background:linear-gradient(180deg, rgba(12,18,32,0.86), rgba(5,10,22,0.9));
+            box-shadow:0 30px 80px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.045);
+            padding:34px 62px;
+        }
+
+        .tabs{
+            width:100%;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            border-bottom:1px solid rgba(148,163,184,0.28);
+            margin-bottom:28px;
+        }
+
+        .tab{
+            padding:0 0 14px;
+            border:none;
+            background:transparent;
+            color:#97a3b7;
+            font:inherit;
+            font-size:17px;
+            font-weight:700;
+            cursor:pointer;
+            position:relative;
+            transition:color 0.2s ease;
+        }
+
+        .tab.active{
+            color:#2383ff;
+        }
+
+        .tab.active::after{
+            content:"";
+            position:absolute;
+            left:8%;
+            right:8%;
+            bottom:-1px;
+            height:3px;
+            border-radius:999px;
+            background:#2383ff;
+            box-shadow:0 0 18px rgba(35,131,255,0.75);
+        }
+
+        .form-view{
+            display:none;
+        }
+
+        .form-view.active{
+            display:block;
+        }
+
+        .lock-badge{
+            width:70px;
+            height:70px;
+            margin:0 auto 22px;
+            display:grid;
+            place-items:center;
+            border-radius:50%;
+            border:1px solid rgba(59,130,246,0.34);
+            background:rgba(15,23,42,0.64);
+            color:#416dff;
+            font-size:31px;
+            box-shadow:0 0 28px rgba(37,99,235,0.32);
+        }
+
+        .form-heading{
+            text-align:center;
+            font-size:25px;
+            font-weight:800;
+            margin-bottom:10px;
+        }
+
+        .form-subtitle{
+            text-align:center;
+            color:#aab5c8;
+            font-size:18px;
+            margin-bottom:28px;
+        }
+
+        .field{
+            margin-bottom:18px;
+        }
+
+        .field label{
+            display:block;
+            margin-bottom:9px;
+            font-size:14px;
+            font-weight:700;
+        }
+
+        .control{
+            position:relative;
+        }
+
+        .control i{
+            position:absolute;
+            left:20px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#8b98ad;
+            font-size:19px;
+        }
+
+        .control input,
+        .control select{
+            width:100%;
+            height:52px;
+            padding:0 20px 0 64px;
+            border:1px solid rgba(148,163,184,0.24);
+            border-radius:8px;
+            outline:none;
+            background:rgba(2,6,23,0.42);
+            color:#ffffff;
+            font-size:16px;
+            transition:border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .control input::placeholder{
+            color:#8e9ab0;
+        }
+
+        .control input:focus,
+        .control select:focus{
+            border-color:#2383ff;
+            box-shadow:0 0 0 4px rgba(35,131,255,0.12);
+            background:rgba(2,6,23,0.62);
+        }
+
+        .control select option{
+            background:#081122;
+            color:#ffffff;
+        }
+
+        .submit-btn{
+            width:100%;
+            height:54px;
+            border:none;
+            border-radius:8px;
+            background:linear-gradient(90deg, #3d5bff, #168bff);
+            color:#ffffff;
+            font-size:17px;
+            font-weight:800;
+            cursor:pointer;
+            box-shadow:0 18px 34px rgba(35,131,255,0.22);
+            transition:transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+
+        .submit-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 22px 44px rgba(35,131,255,0.35);
+            filter:brightness(1.05);
+        }
+
+        .switch-copy{
+            margin-top:20px;
+            text-align:center;
+            color:#aab5c8;
+            font-size:15px;
+        }
+
+        .switch-copy button{
+            border:none;
+            background:transparent;
+            color:#2383ff;
+            font:inherit;
+            font-weight:800;
+            cursor:pointer;
+            margin-left:8px;
+        }
+
+        @media(max-width:1100px){
+            body{
+                overflow:auto;
+            }
+
+            .page-shell{
+                width:min(760px, calc(100vw - 48px));
+                grid-template-columns:1fr;
+                gap:30px;
+                padding:28px 0;
+                overflow:visible;
+            }
+
+            .brand-panel,
+            .auth-panel{
+                min-height:auto;
+            }
+
+            .hero-copy{
+                margin-top:50px;
+            }
+
+            .illustration{
+                width:min(420px, 82%);
+                margin:26px auto 0;
+            }
+
+            .auth-card{
+                min-height:auto;
+            }
+        }
+
+        @media(max-height:760px) and (min-width:1101px){
+            .page-shell{
+                width:min(1390px, calc(100vw - 116px));
+                padding:16px 0;
+                gap:64px;
+            }
+
+            .brand-panel,
+            .auth-panel{
+                min-height:calc(100vh - 32px);
+            }
+
+            .hero-copy{
+                margin-top:34px;
+            }
+
+            .hero-copy h1{
+                font-size:34px;
+            }
+
+            .hero-copy p{
+                font-size:16px;
+                margin-top:14px;
+            }
+
+            .features{
+                gap:16px;
+                margin-top:22px;
+            }
+
+            .feature-icon{
+                width:48px;
+                height:48px;
+                font-size:22px;
+            }
+
+            .illustration{
+                width:min(360px, 76%);
+                margin:18px auto 0;
+            }
+
+            .auth-card{
+                width:min(620px, 100%);
+                padding:26px 56px;
+            }
+
+            .tabs{
+                margin-bottom:22px;
+            }
+
+            .lock-badge{
+                width:58px;
+                height:58px;
+                margin-bottom:16px;
+                font-size:27px;
+            }
+
+            .form-heading{
+                font-size:23px;
+            }
+
+            .form-subtitle{
+                font-size:16px;
+                margin-bottom:20px;
+            }
+
+            .field{
+                margin-bottom:13px;
+            }
+
+            .field label{
+                margin-bottom:7px;
+            }
+
+            .control input,
+            .control select{
+                height:46px;
+            }
+
+            .submit-btn{
+                height:48px;
+            }
+
+            .switch-copy{
+                margin-top:14px;
+            }
+        }
+
+        @media(max-width:640px){
+            .page-shell{
+                padding:22px 16px;
+            }
+
+            .hero-copy h1{
+                font-size:34px;
+            }
+
+            .hero-copy p,
+            .form-subtitle{
+                font-size:17px;
+            }
+
+            .feature{
+                grid-template-columns:52px 1fr;
+            }
+
+            .feature-icon{
+                width:52px;
+                height:52px;
+                font-size:23px;
+            }
+
+            .auth-card{
+                padding:34px 22px;
+                border-radius:16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="page-shell">
+    <section class="brand-panel" aria-label="HireVision introduction">
+        <div>
+            <div class="brand">
+                <div class="brand-mark">
+                    <i class="bi bi-columns-gap"></i>
+                </div>
+                <div>
+                    <div class="brand-name">Hire<span>Vision</span></div>
+                    <div class="brand-tagline">Smart Hiring, Better Future</div>
+                </div>
+            </div>
+
+            <div class="hero-copy">
+                <h1>
+                    Find the <span class="blue">Right Job.</span><br>
+                    Hire the <span class="violet">Right Talent.</span>
+                </h1>
+                <p>HireVision connects talented people with great opportunities.</p>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <div>
+                        <h2>For Job Seekers</h2>
+                        <p>Discover jobs, apply, and build your career.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="bi bi-buildings"></i>
+                    </div>
+                    <div>
+                        <h2>For Recruiters</h2>
+                        <p>Post jobs, find candidates, and grow your team.</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <div>
+                        <h2>Secure &amp; Reliable</h2>
+                        <p>Your data is safe with us.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="illustration" aria-hidden="true">
+            <div class="plant"></div>
+            <div class="person-left"></div>
+            <div class="screen">
+                <div class="candidate-row"></div>
+                <div class="candidate-row"></div>
+                <div class="candidate-row"></div>
+            </div>
+            <div class="lens"></div>
+            <div class="person-right"></div>
+        </div>
+    </section>
+
+    <section class="auth-panel" aria-label="Authentication">
+        <div class="auth-card">
+            <div class="tabs">
+                <button type="button" class="tab active" id="loginTab" onclick="showLogin()">Login</button>
+                <button type="button" class="tab" id="registerTab" onclick="showRegister()">Register</button>
+            </div>
+
+            <div class="form-view active" id="loginForm">
+                <div class="lock-badge">
+                    <i class="bi bi-lock"></i>
+                </div>
+                <h2 class="form-heading">Welcome Back!</h2>
+                <p class="form-subtitle">Login to your account</p>
+
+                <form action="${pageContext.request.contextPath}/login" method="post">
+                    <div class="field">
+                        <label for="loginEmail">Email</label>
+                        <div class="control">
+                            <i class="bi bi-envelope"></i>
+                            <input id="loginEmail" type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="loginPassword">Password</label>
+                        <div class="control">
+                            <i class="bi bi-lock"></i>
+                            <input id="loginPassword" type="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+
+                <p class="switch-copy">
+                    Don't have an account?
+                    <button type="button" onclick="showRegister()">Register</button>
+                </p>
+            </div>
+
+            <div class="form-view" id="registerForm">
+                <div class="lock-badge">
+                    <i class="bi bi-person-plus"></i>
+                </div>
+                <h2 class="form-heading">Create Account</h2>
+                <p class="form-subtitle">Register with HireVision</p>
+
+                <form action="${pageContext.request.contextPath}/register" method="post">
+                    <div class="field">
+                        <label for="fullName">Full Name</label>
+                        <div class="control">
+                            <i class="bi bi-person"></i>
+                            <input id="fullName" type="text" name="fullName" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="registerEmail">Email</label>
+                        <div class="control">
+                            <i class="bi bi-envelope"></i>
+                            <input id="registerEmail" type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="registerPassword">Password</label>
+                        <div class="control">
+                            <i class="bi bi-lock"></i>
+                            <input id="registerPassword" type="password" name="password" placeholder="Create your password" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="role">Role</label>
+                        <div class="control">
+                            <i class="bi bi-person-badge"></i>
+                            <select id="role" name="role" required>
+                                <option value="Candidate">Candidate</option>
+                                <option value="Recruiter">Recruiter</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Register</button>
+                </form>
+
+                <p class="switch-copy">
+                    Already have an account?
+                    <button type="button" onclick="showLogin()">Login</button>
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    const loginTab = document.getElementById("loginTab");
+    const registerTab = document.getElementById("registerTab");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+
+    function showRegister(){
+        loginTab.classList.remove("active");
+        registerTab.classList.add("active");
+        loginForm.classList.remove("active");
+        registerForm.classList.add("active");
+    }
+
+    function showLogin(){
+        registerTab.classList.remove("active");
+        loginTab.classList.add("active");
+        registerForm.classList.remove("active");
+        loginForm.classList.add("active");
+    }
+</script>
+</body>
+</html>

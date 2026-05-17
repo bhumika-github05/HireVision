@@ -8,7 +8,121 @@ import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
 
+import java.util.ArrayList;
+import java.util.List;
+import com.hirevision.model.Application;
+
 public class ApplicationDAO {
+
+    public List<Application> getApplicationsByJob(int jobId){
+
+        List<Application> list =
+                new ArrayList<>();
+
+        try{
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            String query =
+                    "SELECT * FROM applications WHERE job_id=?";
+
+            PreparedStatement ps =
+                    con.prepareStatement(query);
+
+            ps.setInt(1, jobId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Application app =
+                        new Application();
+
+                app.setId(
+                        rs.getInt("id")
+                );
+
+                app.setUserId(
+                        rs.getInt("user_id")
+                );
+
+                app.setJobId(
+                        rs.getInt("job_id")
+                );
+
+                app.setResumeLink(
+                        rs.getString("resume_link")
+                );
+
+                app.setStatus(
+                        rs.getString("status")
+                );
+
+                list.add(app);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Application> getApplicationsByUser(int userId){
+
+        List<Application> list =
+                new ArrayList<>();
+
+        try{
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            String query =
+                    "SELECT * FROM applications WHERE user_id=?";
+
+            PreparedStatement ps =
+                    con.prepareStatement(query);
+
+            ps.setInt(1, userId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Application app =
+                        new Application();
+
+                app.setId(rs.getInt("id"));
+
+                app.setUserId(
+                        rs.getInt("user_id")
+                );
+
+                app.setJobId(
+                        rs.getInt("job_id")
+                );
+
+                app.setResumeLink(
+                        rs.getString("resume_link")
+                );
+
+                app.setStatus(
+                        rs.getString("status")
+                );
+
+                list.add(app);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
     public boolean applyJob(Application app) {
 

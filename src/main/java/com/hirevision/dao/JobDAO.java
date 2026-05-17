@@ -12,6 +12,126 @@ import java.util.List;
 
 public class JobDAO {
 
+    public List<Job> getJobsByRecruiter(int recruiterId){
+
+        List<Job> jobs =
+                new ArrayList<>();
+
+        try{
+
+            Connection conn =
+                    DBConnection.getConnection();
+
+            String sql =
+                    "SELECT * FROM jobs WHERE posted_by=?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setInt(1, recruiterId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Job job =
+                        new Job();
+
+                job.setId(
+                        rs.getInt("id")
+                );
+
+                job.setJobTitle(
+                        rs.getString("job_title")
+                );
+
+                job.setCompanyName(
+                        rs.getString("company_name")
+                );
+
+                job.setLocation(
+                        rs.getString("location")
+                );
+
+                job.setSalary(
+                        rs.getString("salary")
+                );
+
+                job.setDescription(
+                        rs.getString("description")
+                );
+
+                job.setPostedBy(
+                        rs.getInt("posted_by")
+                );
+
+                jobs.add(job);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return jobs;
+    }
+
+    public Job getJobById(int id){
+
+        Job job = null;
+
+        try{
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            String query =
+                    "SELECT * FROM jobs WHERE id=?";
+
+            PreparedStatement ps =
+                    con.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            if(rs.next()){
+
+                job = new Job();
+
+                job.setId(
+                        rs.getInt("id")
+                );
+
+                job.setJobTitle(
+                        rs.getString("job_title")
+                );
+
+                job.setCompanyName(
+                        rs.getString("company_name")
+                );
+
+                job.setLocation(
+                        rs.getString("location")
+                );
+
+                job.setSalary(
+                        rs.getString("salary")
+                );
+
+                job.setDescription(
+                        rs.getString("description")
+                );
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return job;
+    }
+
     public boolean addJob(Job job) {
 
         boolean status = false;
